@@ -1,0 +1,5 @@
+.openai/
+dist/
+live-old.html
+assets/original-*
+__pycache__/
