@@ -1,18 +1,38 @@
 # Site do RevolutX
 
-Site público do bot para Discord, publicado em https://revolutxbot.netlify.app/.
+Site de apresentação hospedado no Netlify, com páginas de recursos, comandos, configuração, ajuda, privacidade e acesso pelo Discord. O site não contém o código do bot.
 
-## Estrutura
+## Publicação
 
-- `index.html`: conteúdo, comandos e perguntas frequentes.
-- `styles.css`: visual e layouts responsivos.
-- `script.js`: menu móvel, filtros, busca e cópia dos comandos.
-- `assets/`: marca e demonstração ilustrativa do clima.
+O Netlify lê `netlify.toml`, executa `node scripts/build.cjs` e publica apenas `dist`. As funções de autenticação ficam no ambiente de servidor. Arquivos de desenvolvimento e documentação não são copiados para a pasta pública.
 
-Não exige dependências nem compilação. No Netlify, mantenha a branch `main`, sem comando de build, e publique a raiz do repositório (`.`). A publicação automática depende de a integração GitHub estar habilitada no projeto Netlify.
+Verificação local:
 
-A imagem de clima é uma demonstração com dados de teste, não uma previsão atual. O site não chama provedores de IA nem usa tokens do bot. Recursos que dependem de configuração ou de serviços externos estão identificados no texto.
+```
+python tests/check_site.py
+node --test tests/auth.test.cjs
+node scripts/build.cjs
+```
 
-## Verificação
+## Login Discord
 
-Execute `python3 tests/check_site.py` e `node --check script.js`. No navegador, confira a versão desktop e a largura de 390 px; teste menu, filtro por categoria, busca sem acentos, resultado vazio, cópia e perguntas frequentes.
+Cadastre esta URL exata em OAuth2 / Redirects da aplicação do RevolutX no Discord Developer Portal:
+
+```
+https://revolutxbot.netlify.app/.netlify/functions/auth-callback
+```
+
+No painel do Netlify, configure variáveis com escopo Functions:
+
+* `DISCORD_CLIENT_SECRET`: segredo OAuth2 da aplicação. Não é o token do bot.
+* `SESSION_SECRET`: valor aleatório com pelo menos 32 caracteres, usado para proteger a sessão. Gere com um gerenciador de senhas ou ferramenta criptográfica.
+
+Os valores nunca devem ser inseridos no HTML, JavaScript público, repositório ou mensagens. Faça um novo deploy depois de configurar. O login é limitado ao domínio oficial de produção e pede somente `identify guilds`. Sem essas variáveis, a página informa que o acesso ainda não está disponível.
+
+A sessão usa cookie HttpOnly, Secure e SameSite=Lax, criptografia AES-GCM e validade máxima de uma hora. O fluxo verifica o estado de autorização. O painel mostra apenas servidores com permissão de gerenciamento. Ele oferece convite, acesso ao Discord e orientações; não altera configurações do bot remotamente. O texto público não promete essa integração.
+
+## Conteúdo
+
+Exemplos de conversa e clima são ilustrativos. O tema do cartão na página inicial é uma demonstração, não uma consulta real. O gerador de personalidade prepara um comando para copiar e executar no Discord. Não há chamada a modelos de IA pelo site.
+
+O menu, busca de comandos, filtros, controles de movimento e temas de demonstração funcionam no navegador. Preferência de movimento reduzido é respeitada. O convite de instalação é o existente da aplicação e solicita Administrador, informação apresentada no guia.
