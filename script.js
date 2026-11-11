@@ -46,3 +46,32 @@ async function loadAccount() {
 }
 $('#logout-button')?.addEventListener('click', async e => { e.target.disabled=true; try { const r=await fetch('/.netlify/functions/auth-logout',{method:'POST'}); if(!r.ok) throw new Error(); location.assign('acesso.html'); } catch { e.target.disabled=false; toast('Não foi possível sair agora. Tente novamente.'); } });
 loadAccount();
+
+const catScene = $('.mascot-scene');
+$('.cat-play')?.addEventListener('click', () => {
+ if (matchMedia('(prefers-reduced-motion: reduce)').matches || document.documentElement.classList.contains('motion-paused')) {
+  toast('As animações estão pausadas nas suas preferências.'); return;
+ }
+ if(catScene.classList.contains('is-playing')) return;
+ catScene.classList.add('is-playing');
+ setTimeout(() => catScene.classList.remove('is-playing'), 1250);
+});
+function selectResource(hash = location.hash) {
+ const panels = $$('.resource-section');
+ if (!panels.length) return;
+ const requested = hash.slice(1);
+ const selected = panels.find(p => p.id === requested) || panels[0];
+ panels.forEach(p => { p.hidden = p !== selected; });
+ $$('.topic-nav a').forEach(a => {
+  if(a.hash === '#' + selected.id) a.setAttribute('aria-current','page');
+  else a.removeAttribute('aria-current');
+ });
+}
+window.addEventListener('hashchange', () => selectResource());
+$$('.topic-nav a').forEach(a => a.addEventListener('click', () => selectResource(a.hash)));
+$$('#navigation a').forEach(a => a.addEventListener('click', () => {
+ if(a.pathname === location.pathname && a.hash) selectResource(a.hash);
+}));
+selectResource();
+
+$('[data-open-menu]')?.addEventListener('click', () => menu.click());

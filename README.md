@@ -33,6 +33,6 @@ A sessão usa cookie HttpOnly, Secure e SameSite=Lax, criptografia AES-GCM e val
 
 ## Conteúdo
 
-Exemplos de conversa e clima são ilustrativos. O tema do cartão na página inicial é uma demonstração, não uma consulta real. O gerador de personalidade prepara um comando para copiar e executar no Discord. Não há chamada a modelos de IA pelo site.
+Exemplos de conversa e clima são ilustrativos. A página inicial reúne a apresentação e o mascote animado. Os recursos são selecionados pelo menu e por categorias, com uma seção visível por vez. O gerador de personalidade prepara um comando para copiar e executar no Discord. Não há chamada a modelos de IA pelo site.
 
 O menu, busca de comandos, filtros, controles de movimento e temas de demonstração funcionam no navegador. Preferência de movimento reduzido é respeitada. O convite de instalação é o existente da aplicação e solicita Administrador, informação apresentada no guia.
